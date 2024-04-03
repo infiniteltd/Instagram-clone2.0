@@ -28,11 +28,18 @@ function Stories() {
         <div className='flex space-x-3  p-6 bg-white mt-8 border-gray-200 border rounded-lg overflow-x-scroll scrollbar-thin scrollbar-thumb-black'>
 
             {session && (
-                <Story image={session.user.image} username={session.user.username} />
+                <Story
+                    img={session.user.image}
+                    username={session.user.username}
+                />
             )}
 
             {suggestions.map((profile) => (
-                <Story key={profile.id} img={profile.avatar} username={profile.username} />
+                <Story
+                    key={profile.id}
+                    img={profile.avatar}
+                    username={profile.username}
+                />
             ))}
         </div>
     );
