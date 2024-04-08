@@ -24,13 +24,12 @@ function Post({ id, username, userImg, img, caption }) {
         onSnapshot(query(collection(db, 'posts', id, 'likes'), orderBy("timestamp", 'desc')), snapshot => setLikes(snapshot.docs));
     }, [db, id]);
 
-    useEffect(() => {
-        if (session && session.user && likes) {
-            setHasLiked(
-                likes.findIndex((like) => like.id === session?.user?.uid) !== -1
-            );
-        }
-    }, [likes, session]);
+    useEffect(() =>
+        setHasLiked(
+            likes.findIndex((like) => like.id === session?.user?.uid) !== 1
+        ),
+        [likes]
+    );
 
 
     const likePost = async () => {
