@@ -21,12 +21,12 @@ function Post({ id, username, userImg, img, caption }) {
     }, [db, id]);
 
     useEffect(() => {
-        onSnapshot(query(collection(db, 'posts', id, 'likes'), orderBy("timestamp", 'desc')), snapshot => setLikes(snapshot.docs));
+        onSnapshot(collection(db, 'posts', id, 'likes'), snapshot => setLikes(snapshot.docs));
     }, [db, id]);
 
     useEffect(() =>
         setHasLiked(
-            likes.findIndex((like) => like.id === session?.user?.uid) !== 1
+            likes.findIndex((like) => like.id === session?.user?.uid) !== -1
         ),
         [likes]
     );
@@ -43,8 +43,6 @@ function Post({ id, username, userImg, img, caption }) {
             });
         }
     };
-
-    console.log(hasLiked);
 
     const sendComment = async (e) => {
         e.preventDefault();
@@ -75,7 +73,9 @@ function Post({ id, username, userImg, img, caption }) {
             {session && (
                 <div className="flex justify-between px-4 pt-4">
                     <div className="flex space-x-4">
-                        <HeartIcon onClick={likePost} className="btn" />
+                        {hasLiked ? <HeartIconFilled onClick={likePost} className="btn text-red-500" /> :
+                            <HeartIcon onClick={likePost} className="btn" />
+                        }
                         <ChatIcon onClick={() => setInput(true)} className="btn" />
                         <PaperAirplaneIcon className="btn" />
                     </div>
@@ -84,7 +84,10 @@ function Post({ id, username, userImg, img, caption }) {
                 </div>
             )}
 
-            <p className="p-5 truncate"><span className="font-bold mr-1">{username} </span>{caption}
+            <p className="p-5 truncate">
+                {likes.length > 0 &&
+                    <p className="font-bold mb-1">{likes.length} likes</p>}
+                <span className="font-bold mr-1">{username} </span>{caption}
             </p>
 
             {/* Comments */}
